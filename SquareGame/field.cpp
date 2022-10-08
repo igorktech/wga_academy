@@ -1,5 +1,6 @@
 #include "field.h"
-
+#include <random>
+#include "QDateTime"
 
 FIELD::FIELD(QWidget *parent) : QWidget(parent)
 {
@@ -41,7 +42,11 @@ FIELD::~FIELD(){
     delete fig;
 }
 void FIELD::slotFigureInit(){
-    qsrand(QTime::currentTime().msec());
+    //qsrand(QTime::currentTime().msec());
+    unsigned int ms = static_cast<unsigned>(QDateTime::currentMSecsSinceEpoch());
+       std::mt19937 gen(ms);
+       std::uniform_int_distribution<> uid(2, 4);
+
     field.clear();
     end_game = 0;
     num_step = 0;
@@ -59,7 +64,7 @@ void FIELD::slotFigureInit(){
             if(field[i][k] == 2){
                             num2++;
                 while(num2 != (num_red+num_yellow+num_green)){
-                field[i][k] = qrand()%3+2;
+                field[i][k] = uid(gen);
                 //qDebug()<<num;
                 if((field[i][k] == 2)&&(num_red!=5)){
                     num_red++;
